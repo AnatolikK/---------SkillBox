@@ -1,0 +1,12 @@
+/* Стили для кнопки Наверх */
+.btn-scroll-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  /* Стили для показа/скрытия кнопки Наверх */
+.d-none {
+    display: none !important;
+}
+  
