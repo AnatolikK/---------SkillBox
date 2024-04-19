@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Онлайн-оплата</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <form id="payment-form">
+      <div class="form-group">
+        <label for="card-number">Номер карты:</label>
+        <input type="text" id="card-number" maxlength="19" placeholder="Введите номер карты" required>
+        <img id="card-logo" src="" alt="" class="card-logo">
+      </div>
+      <div class="form-group">
+        <label for="expiry-date">Дата окончания действия:</label>
+        <input type="text" id="expiry-date" maxlength="5" placeholder="ММ/ГГ" required>
+      </div>
+      <div class="form-group">
+        <label for="cvc">CVC/CVV:</label>
+        <input type="text" id="cvc" maxlength="3" placeholder="CVC/CVV" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Введите ваш email" required>
+      </div>
+      <button type="submit" id="pay-button" disabled>Оплатить</button>
+    </form>
+    <div class="error-message" id="card-error"></div>
+    <div class="error-message" id="expiry-error"></div>
+    <div class="error-message" id="cvc-error"></div>
+    <div class="error-message" id="email-error"></div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
