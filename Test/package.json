@@ -1,0 +1,14 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "author": "anatoliy",
+    "license": "",
+    "devDependencies": {
+        "jest": "^27.5.1"
+    }
+}
