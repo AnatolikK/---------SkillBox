@@ -14,18 +14,24 @@ async function renderEpisodes() {
         const link = document.createElement('a');
         link.href = `#${episode.episode_id}`;
         link.textContent = `${episode.title} (Эпизод ${episode.episode_id})`;
-        link.addEventListener('click', () => renderEpisodeDetails(episode.episode_id));
+        link.addEventListener('click', (event) => {
+            event.preventDefault(); // Предотвращаем стандартное действие ссылки
+            const episodeId = episode.episode_id;
+            renderEpisodeDetails(episodeId, episodes); 
+            history.pushState(null, '', `#${episodeId}`); 
+        });
         listItem.appendChild(link);
         episodeList.appendChild(listItem);
     });
 
+    app.innerHTML = '';
     app.appendChild(episodeList);
 }
 
-async function renderEpisodeDetails(episodeId) {
-    const episode = await fetchData(`https://swapi.dev/api/films/${episodeId}`);
+async function renderEpisodeDetails(episodeId, episodes) {
+    const episode = episodes.results.find(ep => ep.episode_id === episodeId); // Находим нужный эпизод по его id
     const app = document.getElementById('app');
-    app.innerHTML = '';
+    app.innerHTML = ''; // Очищаем содержимое перед отрисовкой
 
     const heading = document.createElement('h1');
     heading.textContent = `${episode.title} (Эпизод ${episode.episode_id})`;
@@ -33,10 +39,7 @@ async function renderEpisodeDetails(episodeId) {
     const backButton = document.createElement('button');
     backButton.textContent = 'Назад к эпизодам';
     backButton.addEventListener('click', () => {
-    renderEpisodes();
-    // Прокрутка к элементу внизу страницы
-    const appBottom = document.getElementById('app').getBoundingClientRect().bottom;
-    window.scrollTo({ top: appBottom, behavior: 'smooth' });
+        window.history.back(); // Возвращаемся на предыдущую страницу в истории браузера
     });
 
     const openingCrawl = document.createElement('p');
@@ -73,4 +76,18 @@ async function renderEpisodeDetails(episodeId) {
     app.appendChild(speciesList);
 }
 
-window.addEventListener('DOMContentLoaded', renderEpisodes);
+
+window.addEventListener('popstate', () => {
+    const url = window.location.hash; // Получаем текущий URL
+    if (url === '') {
+        renderEpisodes(); // Если URL пустой, отображаем список эпизодов
+    } else {
+        const episodeId = url.substring(1); 
+        renderEpisodeDetails(episodeId); 
+    }
+});
+
+//при загрузке страницы
+window.addEventListener('DOMContentLoaded', () => {
+    renderEpisodes();
+});
