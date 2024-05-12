@@ -1,6 +1,5 @@
 async function fetchData(url) {
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = await fetch(url).then(res => res.json());
     return data;
 }
 
@@ -49,12 +48,18 @@ async function renderEpisodeDetails(episodeId, episodes) {
     planetsTitle.textContent = 'Планеты';
 
     const planetsList = document.createElement('ul');
-    await Promise.all(episode.planets.map(async planetUrl => {
+    async function fetchPlanetData(planetUrl) {
         const planetData = await fetchData(planetUrl);
+        return planetData.name;
+    }
+
+    await Promise.all(episode.planets.map(async (planetUrl) => {
+        const planetName = await fetchPlanetData(planetUrl);
         const planetListItem = document.createElement('li');
-        planetListItem.textContent = planetData.name;
+        planetListItem.textContent = planetName;
         planetsList.appendChild(planetListItem);
     }));
+
 
     const speciesTitle = document.createElement('h2');
     speciesTitle.textContent = 'Расы';
@@ -79,7 +84,7 @@ async function renderEpisodeDetails(episodeId, episodes) {
 
 window.addEventListener('popstate', () => {
     const url = window.location.hash; // Получаем текущий URL
-    if (url === '') {
+    if (!url) {
         renderEpisodes(); // Если URL пустой, отображаем список эпизодов
     } else {
         const episodeId = url.substring(1); 
